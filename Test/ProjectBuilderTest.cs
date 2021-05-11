@@ -165,7 +165,14 @@ namespace Test
                 var registerResult = await client.SendAsync(registerMessage);
                 var body = await registerResult.Content.ReadAsStringAsync();
 
-                registerResult.EnsureSuccessStatusCode();
+                try
+                {
+                    registerResult.EnsureSuccessStatusCode();
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception(body, ex);
+                }
 
                 Assert.Equal(System.Net.HttpStatusCode.OK, registerResult.StatusCode);
 
