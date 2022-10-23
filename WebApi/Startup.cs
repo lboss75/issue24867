@@ -1,11 +1,12 @@
-using System.Linq;
-using Microsoft.AspNet.OData.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.OData;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System.Linq;
+using System.Text.Json.Serialization;
 
 namespace WebApi
 {
@@ -29,13 +30,15 @@ namespace WebApi
             
             //services.AddDbContext<Model.DbModel>(options => options.UseNpgsql(connectionString));
 
-            services.AddOData();
             services.AddCors();
 
-            services.AddMvc(b =>
-            {
-                b.EnableEndpointRouting = false;
-            });
+            services
+                .AddControllers()
+                .AddOData(opt =>
+                    opt
+                    .AddRouteComponents("odata", ODataModel.GetEdmModel())
+                    .Select().Expand().Filter().OrderBy()
+                );
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -50,12 +53,11 @@ namespace WebApi
                         .AllowAnyMethod()
                         .AllowAnyHeader());
             }
-
+            app.UseRouting();
             app.UseAuthentication();
-            app.UseMvc(b =>
+            app.UseEndpoints(enpoint =>
             {
-                b.Select().Expand().Filter().OrderBy().MaxTop(100).Count();
-                b.MapODataServiceRoute("odata", "odata", ODataModel.GetEdmModel());
+                enpoint.MapControllers();
             });
         }
     }

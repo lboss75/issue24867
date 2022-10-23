@@ -1,14 +1,15 @@
-﻿using Microsoft.AspNet.OData;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OData.Formatter;
+using Microsoft.AspNetCore.OData.Query;
+using Microsoft.AspNetCore.OData.Routing.Controllers;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace WebApi.Controllers
 {
-    public class ProjectsController : ODataController
+	public class ProjectsController : ODataController
     {
 		private readonly DbModel db_;
 		public ProjectsController(DbModel db)
@@ -89,7 +90,7 @@ namespace WebApi.Controllers
 		}
 
 		[EnableQuery]
-		[Microsoft.AspNet.OData.Routing.ODataRoute("Projects({key})/Modules({relatedKey})")]
+		//[Microsoft.AspNetCode.OData.Routing.ODataRoute("Projects({key})/Modules({relatedKey})")]
 		public Module GetModules([FromODataUri] int key, [FromODataUri] int relatedKey)
 		{
 			return this.Get().Where(x => x.Id == key).SelectMany(x => x.Modules).Single(y => y.Id == relatedKey);
@@ -113,7 +114,7 @@ namespace WebApi.Controllers
 			return Created(value);
 		}
 
-		[Microsoft.AspNet.OData.Routing.ODataRoute("Projects({key})/Modules({relatedKey})")]
+		//[Microsoft.AspNet.OData.Routing.ODataRoute("Projects({key})/Modules({relatedKey})")]
 		public async Task<IActionResult> PutToModules([FromODataUri] int key, [FromODataUri] int relatedKey, [FromBody] Module value)
 		{
 			if (!ModelState.IsValid)
@@ -145,20 +146,20 @@ namespace WebApi.Controllers
 
 		#region Module Types
 		[EnableQuery(MaxExpansionDepth = 5)]
-		[Microsoft.AspNet.OData.Routing.ODataRoute("Projects({project_key})/Modules({module_key})/ModuleTypes")]
+		//[Microsoft.AspNet.OData.Routing.ODataRoute("Projects({project_key})/Modules({module_key})/ModuleTypes")]
 		public IQueryable<ModuleType> GetModuleTypes([FromODataUri] int project_key, [FromODataUri] int module_key)
 		{
 			return this.Get().Where(x => x.Id == project_key).SelectMany(x => x.Modules).Where(x => x.Id == module_key).SelectMany(x => x.ModuleTypes);
 		}
 
 		[EnableQuery(MaxExpansionDepth = 5)]
-		[Microsoft.AspNet.OData.Routing.ODataRoute("Projects({project_key})/Modules({module_key})/ModuleTypes({type_key})")]
+		//[Microsoft.AspNet.OData.Routing.ODataRoute("Projects({project_key})/Modules({module_key})/ModuleTypes({type_key})")]
 		public ModuleType GetModuleTypes([FromODataUri] int project_key, [FromODataUri] int module_key, [FromODataUri] int type_key)
 		{
 			return this.Get().Where(x => x.Id == project_key).SelectMany(x => x.Modules).Where(x => x.Id == module_key).SelectMany(x => x.ModuleTypes).SingleOrDefault(x => x.Id == type_key);
 		}
 
-		[Microsoft.AspNet.OData.Routing.ODataRoute("Projects({project_key})/Modules({module_key})/ModuleTypes")]
+		//[Microsoft.AspNet.OData.Routing.ODataRoute("Projects({project_key})/Modules({module_key})/ModuleTypes")]
 		public async Task<IActionResult> PostToModuleTypes([FromODataUri] int project_key, [FromODataUri] int module_key, [FromBody] ModuleType value)
 		{
 			if (!ModelState.IsValid)
@@ -186,20 +187,20 @@ namespace WebApi.Controllers
 
 		#region Forms
 		[EnableQuery(MaxExpansionDepth = 5)]
-		[Microsoft.AspNet.OData.Routing.ODataRoute("Projects({project_key})/Modules({module_key})/Forms")]
+		//[Microsoft.AspNet.OData.Routing.ODataRoute("Projects({project_key})/Modules({module_key})/Forms")]
 		public IQueryable<UIForm> GetModuleForms([FromODataUri] int project_key, [FromODataUri] int module_key)
 		{
 			return this.Get().Where(x => x.Id == project_key).SelectMany(x => x.Modules).Where(x => x.Id == module_key).SelectMany(x => x.Forms).Include(x => x.BindedType).ThenInclude(x => x.Module);
 		}
 
 		[EnableQuery(MaxExpansionDepth = 5)]
-		[Microsoft.AspNet.OData.Routing.ODataRoute("Projects({project_key})/Modules({module_key})/Forms({table_key})")]
+		//[Microsoft.AspNet.OData.Routing.ODataRoute("Projects({project_key})/Modules({module_key})/Forms({table_key})")]
 		public UIForm GetModuleForms([FromODataUri] int project_key, [FromODataUri] int module_key, [FromODataUri] int form_key)
 		{
 			return this.Get().Where(x => x.Id == project_key).SelectMany(x => x.Modules).Where(x => x.Id == module_key).SelectMany(x => x.Forms).SingleOrDefault(x => x.Id == form_key);
 		}
 
-		[Microsoft.AspNet.OData.Routing.ODataRoute("Projects({project_key})/Modules({module_key})/Forms")]
+		//[Microsoft.AspNet.OData.Routing.ODataRoute("Projects({project_key})/Modules({module_key})/Forms")]
 		public async Task<IActionResult> PostToModuleForms([FromODataUri] int project_key, [FromODataUri] int module_key, [FromBody] UIForm value)
 		{
 			if (!ModelState.IsValid)

@@ -13,7 +13,7 @@ namespace WebApi
 		public string Name { get; set; }
 		[ForeignKey(nameof(BindedType))]
 		public int? BindedTypeId { get; set; }
-		public virtual EntityType BindedType { get; set; }
-		//public virtual ModuleType BindedType { get; set; }
+		//public virtual EntityType BindedType { get; set; }
+		public virtual ModuleType BindedType { get; set; }
 	}
 }
