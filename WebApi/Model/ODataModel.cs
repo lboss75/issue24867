@@ -9,13 +9,10 @@ namespace WebApi
         {
             ODataConventionModelBuilder builder = new ODataConventionModelBuilder();
             var projects = builder.EntitySet<Project>("Projects");
-            builder.EntityType<Project>().HasMany(x => x.Modules).Contained();
-            builder.EntityType<Module>().HasMany(x => x.ModuleTypes).Contained();
-            builder.EntityType<Module>().HasMany(x => x.Forms).Contained();
-            builder.EntityType<EntityType>().HasMany(x => x.Properties).Contained();
 
-            builder.EntityType<UIForm>().HasOptional(x => x.BindedType).IsNavigable();
-            builder.EntityType<ModuleType>().HasRequired(x => x.Module).IsNavigable();
+            projects.EntityType.HasMany(x => x.Modules).Contained();
+            //builder.EntityType<Project>().HasMany(x => x.Modules).Contained();
+            //builder.EntityType<Project>().CollectionProperty(x => x.Modules);
 
             return builder.GetEdmModel();
         }

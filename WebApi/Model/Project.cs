@@ -4,8 +4,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebApi
 {
-    public class Project
-    {
+	public class Project
+	{
 		[Key]
 		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 		public int Id { get; set; }
@@ -14,5 +14,5 @@ namespace WebApi
 		public string Name { get; set; }
 		[InverseProperty(nameof(Module.Project))]
 		public virtual IList<Module> Modules { get; set; }
-    }
+	}
 }
