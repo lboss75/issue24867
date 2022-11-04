@@ -11,6 +11,9 @@ namespace WebApi
             var projects = builder.EntitySet<Project>("Projects");
 
             projects.EntityType.HasMany(x => x.Modules).Contained();
+
+            _ = builder.EntitySet<Module>("ProjectModules");
+
             //builder.EntityType<Project>().HasMany(x => x.Modules).Contained();
             //builder.EntityType<Project>().CollectionProperty(x => x.Modules);
 
